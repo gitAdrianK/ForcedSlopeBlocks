@@ -1,14 +1,14 @@
-﻿using JumpKing.API;
-using JumpKing.Level;
-using JumpKing.Level.Sampler;
-using JumpKing.Mods;
-using JumpKing.Workshop;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-
-namespace ForcedSlopeBlocks
+﻿namespace ForcedSlopeBlocks
 {
+    using System;
+    using System.Collections.Generic;
+    using JumpKing.API;
+    using JumpKing.Level;
+    using JumpKing.Level.Sampler;
+    using JumpKing.Mods;
+    using JumpKing.Workshop;
+    using Microsoft.Xna.Framework;
+
     [JumpKingMod("Zebra.ForcedSlopesBlock")]
     public static class ModEntry
     {
@@ -16,10 +16,7 @@ namespace ForcedSlopeBlocks
         /// Called by Jump King before the level loads
         /// </summary>
         [BeforeLevelLoad]
-        public static void BeforeLevelLoad()
-        {
-            LevelManager.RegisterBlockFactory(new FactoryForcedSlope());
-        }
+        public static void BeforeLevelLoad() => LevelManager.RegisterBlockFactory(new FactoryForcedSlope());
     }
 
     public class FactoryForcedSlope : IBlockFactory
@@ -29,7 +26,7 @@ namespace ForcedSlopeBlocks
         public static readonly Color BLOCKCODE_BOTTOM_LEFT = new Color(255, 2, 0);
         public static readonly Color BLOCKCODE_BOTTOM_RIGHT = new Color(255, 0, 2);
 
-        private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color>
+        private static readonly HashSet<Color> SupportedBlockCodes = new HashSet<Color>
         {
             BLOCKCODE_TOP_LEFT,
             BLOCKCODE_TOP_RIGHT,
@@ -37,10 +34,7 @@ namespace ForcedSlopeBlocks
             BLOCKCODE_BOTTOM_RIGHT,
         };
 
-        bool IBlockFactory.CanMakeBlock(Color blockCode, Level level)
-        {
-            return supportedBlockCodes.Contains(blockCode);
-        }
+        bool IBlockFactory.CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
 
         bool IBlockFactory.IsSolidBlock(Color blockCode)
         {
@@ -51,6 +45,8 @@ namespace ForcedSlopeBlocks
                 case var _ when blockCode == BLOCKCODE_BOTTOM_LEFT:
                 case var _ when blockCode == BLOCKCODE_BOTTOM_RIGHT:
                     return true;
+                default:
+                    break;
             }
             return false;
         }
@@ -68,7 +64,7 @@ namespace ForcedSlopeBlocks
                 case var _ when blockCode == BLOCKCODE_BOTTOM_RIGHT:
                     return new SlopeBlock(blockRect, SlopeType.BottomRight);
                 default:
-                    throw new InvalidOperationException($"{typeof(FactoryForcedSlope).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                    throw new InvalidOperationException($"{nameof(FactoryForcedSlope)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
         }
     }
